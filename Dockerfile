@@ -5,7 +5,7 @@
 # sure you lock down to a specific version, not to `latest`!
 # See https://github.com/phusion/baseimage-docker/blob/master/Changelog.md for
 # a list of version numbers.
-FROM phusion/baseimage:0.9.18
+FROM phusion/baseimage:0.9.19
 MAINTAINER Zuhkov <zuhkov@gmail.com> & aptalca
 
 # Set correct environment variables.
@@ -27,8 +27,8 @@ RUN usermod -u 99 nobody && \
 # Disable SSH
 RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0xcbcb082a1bb943db && \
-    echo "deb http://mariadb.mirror.iweb.com/repo/5.5/ubuntu `lsb_release -cs` main" \
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0xF1656F24C74CD1D8 && \
+    echo "deb http://mariadb.mirror.iweb.com/repo/10.1/ubuntu `lsb_release -cs` main" \
     > /etc/apt/sources.list.d/mariadb.list
 
 ### Don't let apt install docs or man pages
@@ -36,9 +36,9 @@ COPY excludes /etc/dpkg/dpkg.cfg.d/excludes
 ### Install packages and clean up in one command to reduce build size
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libcairo2-dev libpng12-dev freerdp-x11 libssh2-1 \
-    libfreerdp-dev libvorbis-dev libssl0.9.8 gcc libssh-dev libpulse-dev tomcat7 tomcat7-admin \
+    libfreerdp-dev libvorbis-dev libssl1.0.0 gcc libssh-dev libpulse-dev tomcat8 tomcat8-admin tomcat8-user \
     libpango1.0-dev libssh2-1-dev autoconf wget libossp-uuid-dev libtelnet-dev libvncserver-dev \
-    build-essential software-properties-common pwgen mariadb-server && \
+    build-essential software-properties-common pwgen nano mariadb-server && \
 
 
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
@@ -95,7 +95,7 @@ RUN cd /tmp && \
     rm -Rf /tmp/*
 
 ### Install precompiled client webapp
-RUN cd /var/lib/tomcat7/webapps && \
+RUN cd /var/lib/tomcat8/webapps && \
     rm -Rf ROOT && \
     wget -q --span-hosts http://sourceforge.net/projects/guacamole/files/current/binary/guacamole-${GUAC_VER}.war && \
     ln -s guacamole-$GUAC_VER.war ROOT.war && \
@@ -113,8 +113,9 @@ RUN cd /tmp && \
     ldconfig && \
     rm -Rf /tmp/*
 
-### Compensate for GUAC-513
-RUN ln -s /usr/local/lib/freerdp/guacsnd.so /usr/lib/x86_64-linux-gnu/freerdp/ && \
+### Compensate for GUAC-513 #Fix for 16.04
+RUN mkdir /usr/lib/x86_64-linux-gnu/freerdp && \
+    ln -s /usr/local/lib/freerdp/guacsnd.so /usr/lib/x86_64-linux-gnu/freerdp/ && \
     ln -s /usr/local/lib/freerdp/guacdr.so /usr/lib/x86_64-linux-gnu/freerdp/
 
 ### Configure Service Startup

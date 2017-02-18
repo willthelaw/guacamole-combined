@@ -1,4 +1,6 @@
 #!/bin/sh
-/etc/init.d/tomcat7 start
+echo "GUACAMOLE_HOME=/config/guacamole" >> /etc/default/tomcat8
+# The init script doesnt track pid #We dont care as this is a container
+/etc/init.d/tomcat8 start >/dev/null 2>&1
 /etc/init.d/guacd start
 exit 0
