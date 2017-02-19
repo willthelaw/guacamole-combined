@@ -41,6 +41,29 @@ docker run -d -v /your-config-location:/config -p 8080:8080 jasonbean/guacamole
 
 Browse to ```http://your-host-ip:8080``` and login with user and password `guacadmin`
 
+Docker Swarm 1.12+
+
+```
+Using with the dockercloud/haproxy container
+
+docker service create --name guacamole-server-all \
+--network proxy \
+--network guacamole_net \
+--env SERVICE_PORTS=8080 \
+--env VIRTUAL_HOST=http://guacamole.lan,https://guacamole.lan \
+--env FORCE_SSL=yes \
+--mount type=bind,source=/mnt/dockervol/guacamole,target=/config \
+db260179/guacamole-combined
+
+OR (not recommended for security reasons)
+
+docker service create --name guacamole-server-all \
+--publish 8080:8080 \
+--mount type=bind,source=/mnt/dockervol/guacamole,target=/config \
+db260179/guacamole-combined
+
+```
+
 ---
 Credits
 ===
