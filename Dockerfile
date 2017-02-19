@@ -38,7 +38,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends libcairo2-dev libpng12-dev freerdp-x11 libssh2-1 \
     libfreerdp-dev libvorbis-dev libssl1.0.0 gcc libssh-dev libpulse-dev tomcat8 tomcat8-admin tomcat8-user \
     libpango1.0-dev libssh2-1-dev autoconf wget libossp-uuid-dev libtelnet-dev libvncserver-dev \
-    build-essential software-properties-common pwgen nano mariadb-server && \
+    build-essential software-properties-common pwgen mariadb-server && \
 
 
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
@@ -130,7 +130,11 @@ RUN chmod a+x /etc/rc.local && \
     chown -R nobody:users /var/log/mysql* && \
     chown -R nobody:users /var/lib/mysql && \
     chown -R nobody:users /etc/mysql && \
-    chown -R nobody:users /var/run/mysqld
+    chown -R nobody:users /var/run/mysqld && \
+    rm -rf /var/log/mysql && \
+    mkdir /var/log/mysql && \
+    chown nobody:users /var/log/mysql && \
+    chmod 755 /var/log/mysql
 
 EXPOSE 8080
 
