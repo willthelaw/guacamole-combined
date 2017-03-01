@@ -115,8 +115,7 @@ RUN cd /tmp && \
 
 ### Compensate for GUAC-513 #Fix for 16.04
 RUN mkdir /usr/lib/x86_64-linux-gnu/freerdp && \
-    ln -s /usr/local/lib/freerdp/guacsnd.so /usr/lib/x86_64-linux-gnu/freerdp/ && \
-    ln -s /usr/local/lib/freerdp/guacdr.so /usr/lib/x86_64-linux-gnu/freerdp/
+    ln -s /usr/local/lib/freerdp/guac* /usr/lib/x86_64-linux-gnu/freerdp/
 
 ### Configure Service Startup
 COPY rc.local /etc/rc.local
