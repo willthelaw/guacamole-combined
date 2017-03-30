@@ -37,7 +37,7 @@ COPY excludes /etc/dpkg/dpkg.cfg.d/excludes
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libcairo2-dev libpng12-dev freerdp-x11 libssh2-1 \
     libfreerdp-dev libvorbis-dev libssl1.0.0 gcc libssh-dev libpulse-dev tomcat8 tomcat8-admin tomcat8-user \
-    libpango1.0-dev libssh2-1-dev autoconf wget libossp-uuid-dev libtelnet-dev libvncserver-dev \
+    libpango1.0-dev libssh2-1-dev autoconf wget libossp-uuid-dev libtelnet-dev libvncserver-dev libwebp-dev \
     build-essential software-properties-common pwgen mariadb-server && \
 
 
@@ -119,6 +119,10 @@ RUN mkdir /usr/lib/x86_64-linux-gnu/freerdp && \
 
 ### Configure Service Startup
 COPY rc.local /etc/rc.local
+RUN rm -rf /var/log/mysql && \
+    mkdir /var/log/mysql && \
+    chown nobody:users /var/log/mysql && \
+    chmod 0755 /var/log/mysql
 COPY mariadb.sh /etc/service/mariadb/run
 COPY firstrun.sh /etc/my_init.d/firstrun.sh
 COPY configfiles/. /etc/firstrun/
@@ -130,10 +134,8 @@ RUN chmod a+x /etc/rc.local && \
     chown -R nobody:users /var/lib/mysql && \
     chown -R nobody:users /etc/mysql && \
     chown -R nobody:users /var/run/mysqld && \
-    rm -rf /var/log/mysql && \
-    mkdir /var/log/mysql && \
     chown nobody:users /var/log/mysql && \
-    chmod 755 /var/log/mysql
+    chmod 0755 /var/log/mysql
 
 EXPOSE 8080
 
