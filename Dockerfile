@@ -121,8 +121,7 @@ RUN cd /tmp && \
     rm -Rf /tmp/*
 
 ### Compensate for GUAC-513
-RUN ln -s /usr/local/lib/freerdp/guacsnd-client.so /usr/lib/x86_64-linux-gnu/freerdp/ && \
-    ln -s /usr/local/lib/freerdp/guacdr-client.so /usr/lib/x86_64-linux-gnu/freerdp/
+RUN ln -s /usr/local/lib/freerdp/guac* /usr/lib/x86_64-linux-gnu/freerdp/
 
 ### Configure Service Startup
 COPY rc.local /etc/rc.local
